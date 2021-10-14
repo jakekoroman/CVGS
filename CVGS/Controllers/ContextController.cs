@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace CVGS.Controllers
 {
-    public class RegisterController : ContextController
+    public class ContextController : Controller
     {
-        public RegisterController(DBContext context) : base(context)
-        {
+        public readonly DBContext context;
 
-        }
-
-        public IActionResult Index()
+        public ContextController(DBContext context)
         {
-            return View();
+            this.context = context;
         }
     }
 }

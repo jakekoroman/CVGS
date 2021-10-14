@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CVGS.Controllers
+namespace CVGS.Controllers.employee
 {
-    public class RegisterController : ContextController
+    public class EmployeeController : ContextController
     {
-        public RegisterController(DBContext context) : base(context)
+
+        public EmployeeController(DBContext context) : base(context)
         {
 
         }
@@ -18,5 +19,7 @@ namespace CVGS.Controllers
         {
             return View();
         }
+
+      
     }
 }

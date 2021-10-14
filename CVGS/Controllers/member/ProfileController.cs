@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CVGS.Controllers
+namespace CVGS.Controllers.member
 {
-    public class RegisterController : ContextController
+    public class ProfileController : ContextController
     {
-        public RegisterController(DBContext context) : base(context)
+        public ProfileController(DBContext context) : base(context)
         {
 
         }

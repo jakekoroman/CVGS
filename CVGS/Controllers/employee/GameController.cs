@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CVGS.Controllers
+namespace CVGS.Controllers.employee
 {
-    public class RegisterController : ContextController
+    public class GameController : ContextController
     {
-        public RegisterController(DBContext context) : base(context)
+
+        public GameController(DBContext context) : base(context)
         {
 
         }

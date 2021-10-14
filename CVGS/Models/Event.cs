@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace CVGS.Models
 {
-    public class Game
+    public class Event
     {
 
         public int ID { get; set; }
 
         public String Name { get; set; }
 
- 
+        public DateTime Date { get; set; }
     }
 }

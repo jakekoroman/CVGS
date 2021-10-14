@@ -27,7 +27,7 @@ namespace CVGS
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<CVGSContext>(options =>
+            services.AddDbContext<DBContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CVGSContext")));
         }
 

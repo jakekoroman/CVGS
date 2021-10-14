@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CVGS.Models
 {
-    /// <summary>
-    /// Represents an person entity on the system, other classes will inherit the class
-    /// to reuse shared properties such as FirstName & LastName
-    /// </summary>
-    public class Person
+    public class User
     {
-
-       public Person()
-        {
-            Addresses = new List<Address>();
-        }
-
         public int ID { get; set; }
 
         [Required]
@@ -46,8 +36,32 @@ namespace CVGS.Models
 
         public String VerififcationToken { get; set; }
 
-        public virtual ICollection<Address> Addresses { get; set; }
 
+        public String Country { get; set; }
+
+        public String City { get; set; }
+
+        public String PostalCode { get; set; }
+
+        public String Street { get; set; }
+
+        public String Province { get; set; }
+
+        public Platform FavoritePlatform { get; set; }
+        public GameCategory FavoriteGameCategory { get; set; }
 
     }
 }
+
+public enum Platform
+{
+    Xbox,
+    PC,
+}
+
+
+public enum GameCategory
+{
+    MMORPG
+}
+

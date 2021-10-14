@@ -3,14 +3,16 @@ using CVGS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CVGS.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class CVGSContextModelSnapshot : ModelSnapshot
+    [Migration("20211014200637_new-schema")]
+    partial class newschema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
