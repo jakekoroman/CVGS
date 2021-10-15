@@ -7,23 +7,21 @@ using System.Threading.Tasks;
 
 namespace CVGS.Controllers.employee
 {
-    public class EmployeeController : ContextController
+    public class EventController : ContextController
     {
 
-        public EmployeeController(DBContext context) : base(context)
+        public EventController(DBContext context): base(context)
         {
 
         }
 
         public IActionResult Index()
         {
-            return View();
+            var events = context.Event.ToArray();
+            return View(events);
         }
 
-      
-        public ActionResult Report()
-        {
-            return View("~/Views/Employee/Reports/Index.cshtml");
-        }
+
+
     }
 }

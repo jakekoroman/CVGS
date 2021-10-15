@@ -1,15 +1,20 @@
 ﻿
-
+@model User  
 <div class="login">
-    <h1>Login</h1>
-    <form>
-        <label>First Name</label>
-        <input type="text" />
-        <label>Last Name</label>
-        <input type="text" />
-        <label>Email</label>
-        <input type="text" />
-        <button>Register</button>
-        <a href="#">Forget Password?</a>
-    </form>
+    @using (Html.BeginForm("LoginForm", "Login", FormMethod.Post)) {
+<table>
+    <tr>
+        <td>Email: </td>
+        <td>@Html.TextBoxFor(m => m.Email)</td>
+    </tr>
+    <tr>
+        <td>Password: </td>
+        <td>@Html.TextBoxFor(m => m.Password)</td>
+    </tr>
+    <tr>
+        <td colspan="2"><input type="submit" value="Login" /></td>
+    </tr>
+</table>
+    }
+
 </div>

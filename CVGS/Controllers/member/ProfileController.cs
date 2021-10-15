@@ -18,5 +18,7 @@ namespace CVGS.Controllers.member
         {
             return View();
         }
+
+
     }
 }

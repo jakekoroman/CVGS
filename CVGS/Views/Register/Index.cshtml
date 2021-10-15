@@ -1,14 +1,26 @@
 ﻿
+@model User
+<div class="login">
+    @using (Html.BeginForm("RegisterForm", "Register", FormMethod.Post))
+    {
+    <table>
+        <tr>
+            <td>First Name: </td>
+            <td>@Html.TextBoxFor(m => m.FirstName)</td>
+        </tr>
+        <tr>
+            <td>Last Name: </td>
+            <td>@Html.TextBoxFor(m => m.LastName)</td>
+        </tr>
 
-<div class="register">
-    <h1>Register</h1>
-    <form>
-        <label>First Name</label>
-        <input type="text" />
-        <label>Last Name</label>
-        <input type="text" />
-        <label>Email</label>
-        <input type="text" />
-        <button>Register</button>
-    </form>
+        <tr>
+            <td>Email: </td>
+            <td>@Html.TextBoxFor(m => m.Email)</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Register" /></td>
+        </tr>
+    </table>
+    }
+
 </div>

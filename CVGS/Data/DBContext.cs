@@ -11,11 +11,7 @@ namespace CVGS.Data
     {
         public DBContext(DbContextOptions<DBContext> options)
             : base(options)
-        {
-
-
-
-        }
+        { }
 
         public DbSet<User> User { get; set; }
         public DbSet<User> Game { get; set; }
