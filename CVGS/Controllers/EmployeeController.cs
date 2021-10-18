@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CVGS.Controllers.employee
+namespace CVGS.Controllers
 {
     public class EmployeeController : ContextController
     {
@@ -23,7 +23,7 @@ namespace CVGS.Controllers.employee
       
         public ActionResult Report()
         {
-            return View("~/Views/Employee/Reports/Index.cshtml");
+            return View("~/Views/Employee/Report/");
         }
     }
 }

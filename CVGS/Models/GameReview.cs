@@ -8,9 +8,16 @@ namespace CVGS.Models
     public class GameReview
     {
 
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        //The text content of the review
         public String Content { get; set; }
+
+        public int GameId { get; set; }
+        public Game Game { get; set; }
+
+        //The user who left the review
+        public int UserId { get; set; }
+
+        public User User;
     }
 }

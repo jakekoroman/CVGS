@@ -8,10 +8,9 @@ namespace CVGS.Models
     public class Game
     {
 
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         public String Name { get; set; }
-
- 
+        public ICollection<GameReview> Reviews { get; set; }
     }
 }

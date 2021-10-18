@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,28 +8,30 @@ using System.Threading.Tasks;
 
 namespace CVGS.Models
 {
+    [Index(nameof(Email), IsUnique = true), Index(nameof(DisplayName), IsUnique = true)]
     public class User
     {
         public int ID { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
-        [Column("FirstName")]
-        [Display(Name = "First Name")]
+        public Role UserRole { get; set; }
+
+        [Required]
         public String FirstName { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
-        [Display(Name = "Last Name")]
         public String LastName { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Birth Date")]
-        public DateTime BirthDate { get; set; }
+        [Required]
+        public String DisplayName { get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)]
+        public DateTime BirthDate { get; set; }
+
+        
+        public String Gender { get; set; }
+
+       [Required]
         public String Email { get; set; }
 
         [DataType(DataType.Password)]
@@ -36,19 +39,34 @@ namespace CVGS.Models
 
         public String VerififcationToken { get; set; }
 
-
+        [Required]
         public String Country { get; set; }
 
+        [Required]
         public String City { get; set; }
+
+        [Required]
 
         public String PostalCode { get; set; }
 
+        [Required]
         public String Street { get; set; }
 
+        [Required]
         public String Province { get; set; }
 
+        public Boolean ReceivePromomotionalEmails { get; set; }
+
         public Platform FavoritePlatform { get; set; }
+
         public GameCategory FavoriteGameCategory { get; set; }
+
+        public ICollection<GameReview> Reviews { get; set; }
+
+        public bool IsEmployee()
+        {
+            return UserRole == Role.Employee;
+        }
 
     }
 }
@@ -65,3 +83,8 @@ public enum GameCategory
     MMORPG
 }
 
+public enum Role
+{
+    Employee,
+    Member
+}

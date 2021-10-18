@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace CVGS.Models
 {
-    public class Event
+    public class Event 
     {
 
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         public String Name { get; set; }
 

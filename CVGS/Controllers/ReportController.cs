@@ -5,23 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CVGS.Controllers.employee
+namespace CVGS.Controllers
 {
-    public class EventController : ContextController
+    public class ReportController : ContextController
     {
 
-        public EventController(DBContext context): base(context)
+        public ReportController(DBContext context) : base(context)
         {
 
         }
 
         public IActionResult Index()
         {
-            var events = context.Event.ToArray();
-            return View(events);
+            return View();
         }
-
-
-
     }
 }

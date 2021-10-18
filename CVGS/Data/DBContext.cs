@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CVGS.Models;
 
@@ -14,9 +11,11 @@ namespace CVGS.Data
         { }
 
         public DbSet<User> User { get; set; }
-        public DbSet<User> Game { get; set; }
-        public DbSet<User> GameReview { get; set; }
-        public DbSet<User> Event { get; set; }
 
+        public DbSet<Event> Event { get; set; }
+
+        public DbSet<Game> Game { get; set; }
+
+        public DbSet<GameReview> GameReview { get; set; }
     }
 }
