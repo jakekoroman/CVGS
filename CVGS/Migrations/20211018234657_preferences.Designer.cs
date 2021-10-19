@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20211017232138_init")]
-    partial class init
+    [Migration("20211018234657_preferences")]
+    partial class preferences
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,11 +105,11 @@ namespace CVGS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FavoriteGameCategory")
-                        .HasColumnType("int");
+                    b.Property<string>("FavoriteGameCategory")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FavoritePlatform")
-                        .HasColumnType("int");
+                    b.Property<string>("FavoritePlatform")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -140,8 +140,9 @@ namespace CVGS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VerififcationToken")
                         .HasColumnType("nvarchar(max)");

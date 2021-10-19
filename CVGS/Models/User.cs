@@ -14,7 +14,7 @@ namespace CVGS.Models
         public int ID { get; set; }
 
         [Required]
-        public Role UserRole { get; set; }
+        public String UserRole { get; set; }
 
         [Required]
         public String FirstName { get; set; }
@@ -57,34 +57,19 @@ namespace CVGS.Models
 
         public Boolean ReceivePromomotionalEmails { get; set; }
 
-        public Platform FavoritePlatform { get; set; }
+        public String FavoritePlatform { get; set; }
 
-        public GameCategory FavoriteGameCategory { get; set; }
+        public String FavoriteGameCategory { get; set; }
 
         public ICollection<GameReview> Reviews { get; set; }
 
+        public ICollection<CreditCard> CreditCards { get; set; }
+
         public bool IsEmployee()
         {
-            return UserRole == Role.Employee;
+            return UserRole == "EMPLOYEE";
         }
 
     }
 }
 
-public enum Platform
-{
-    Xbox,
-    PC,
-}
-
-
-public enum GameCategory
-{
-    MMORPG
-}
-
-public enum Role
-{
-    Employee,
-    Member
-}

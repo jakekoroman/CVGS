@@ -23,9 +23,99 @@ namespace CVGS.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //TODO: session id
-            var user = await base.context.User.FirstOrDefaultAsync((u) => u.ID == 1);
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+          
+            User user = await GetLoggedInUser();
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
             return View(user);
         }
+
+        public async Task<IActionResult> Profile()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            User user = await GetLoggedInUser();
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile([Bind("ID,FirstName, LastName, Gender, BirthDate, ReceivePromomotionalEmails")] User user)
+        {
+
+
+            User u = await GetLoggedInUser();
+            u.FirstName = user.FirstName;
+            u.LastName = user.LastName;
+            u.Gender = user.Gender;
+            u.BirthDate = user.BirthDate;
+            u.ReceivePromomotionalEmails = user.ReceivePromomotionalEmails;
+            try
+                {
+                    base.context.Update(u);
+                    await base.context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Preferences()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            User user = await GetLoggedInUser();
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Preferences([Bind("ID,FavoritePlatform, FavoriteGameCategory")] User user)
+        {
+
+
+            User u = await GetLoggedInUser();
+            u.FavoriteGameCategory = user.FavoriteGameCategory;
+            u.FavoritePlatform = user.FavoritePlatform;
+            try
+            {
+                base.context.Update(u);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> CreditCard()
+        {
+           
+            return View();
+        }
     }
+
+
 }

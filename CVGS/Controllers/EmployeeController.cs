@@ -1,4 +1,5 @@
 ﻿using CVGS.Data;
+using CVGS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,13 @@ namespace CVGS.Controllers
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            User user = await GetLoggedInUser();
+            if (user.UserRole == "MEMBER")
+            {
+                return RedirectToAction("Index", "Member");
+            }
             return View();
         }
 

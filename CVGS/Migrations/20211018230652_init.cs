@@ -40,7 +40,7 @@ namespace CVGS.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserRole = table.Column<int>(nullable: false),
+                    UserRole = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     DisplayName = table.Column<string>(nullable: false),
@@ -54,9 +54,7 @@ namespace CVGS.Migrations
                     PostalCode = table.Column<string>(nullable: false),
                     Street = table.Column<string>(nullable: false),
                     Province = table.Column<string>(nullable: false),
-                    ReceivePromomotionalEmails = table.Column<bool>(nullable: false),
-                    FavoritePlatform = table.Column<int>(nullable: false),
-                    FavoriteGameCategory = table.Column<int>(nullable: false)
+                    ReceivePromomotionalEmails = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
