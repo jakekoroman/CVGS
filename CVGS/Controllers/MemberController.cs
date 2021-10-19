@@ -112,7 +112,6 @@ namespace CVGS.Controllers
 
         public async Task<IActionResult> CreditCard()
         {
-           
             return View();
         }
     }

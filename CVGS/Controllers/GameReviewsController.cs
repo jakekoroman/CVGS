@@ -7,22 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVGS.Data;
 using CVGS.Models;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace CVGS.Controllers
 {
     public class GameReviewsController : Controller
     {
         private readonly DBContext _context;
+        private readonly INotyfService _notyf;
 
-        public GameReviewsController(DBContext context)
+        public GameReviewsController(DBContext context, INotyfService notyf)
         {
             _context = context;
+            // injects toast support
+            _notyf = notyf;
         }
 
         // GET: GameReviews
         public async Task<IActionResult> Index()
         {
             var dBContext = _context.GameReview.Include(g => g.Game);
+            _notyf.Success("Test Message");
             return View(await dBContext.ToListAsync());
         }
 
