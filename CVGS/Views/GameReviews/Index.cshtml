@@ -21,6 +21,10 @@
     <tbody>
         @foreach (var item in Model)
         {
+            @if (item.Approved)
+            {
+                continue;
+            }
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Content)
@@ -29,7 +33,7 @@
                     @Html.DisplayFor(modelItem => item.Game.Name)
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Approve</a>
+                    <a asp-action="Approve" asp-route-id="@item.Id">Approve</a>
                     <a asp-action="Delete" asp-route-id="@item.Id">Remove</a>
                 </td>
             </tr>
