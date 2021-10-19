@@ -112,9 +112,35 @@ namespace CVGS.Controllers
 
         public async Task<IActionResult> CreditCard()
         {
-           
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            ViewBag.CreditCards = await base.context.CreditCard.Where((c) => c.UserId == GetUserLoggedInId()).ToListAsync();
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreditCard([Bind("CardNumber")] CreditCard card)
+        {
+
+
+            User u = await GetLoggedInUser();
+            card.UserId = u.ID;
+            try
+            {
+                base.context.Add(card);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+    
     }
 
 

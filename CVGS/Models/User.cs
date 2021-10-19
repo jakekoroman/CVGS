@@ -35,6 +35,7 @@ namespace CVGS.Models
         public String Email { get; set; }
 
         [DataType(DataType.Password)]
+        [StringLength(100, ErrorMessage = "Pass \"{0}\" must have no less {2} chars.", MinimumLength = 8)]
         public String Password { get; set; }
 
         public String VerififcationToken { get; set; }

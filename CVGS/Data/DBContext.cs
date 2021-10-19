@@ -17,5 +17,7 @@ namespace CVGS.Data
         public DbSet<Game> Game { get; set; }
 
         public DbSet<GameReview> GameReview { get; set; }
+
+        public DbSet<CreditCard> CreditCard { get; set; }
     }
 }

@@ -224,5 +224,10 @@ namespace CVGS.Controllers
             }
             return token;
         }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
     }
 }
