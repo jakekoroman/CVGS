@@ -19,5 +19,7 @@ namespace CVGS.Data
         public DbSet<GameReview> GameReview { get; set; }
 
         public DbSet<CreditCard> CreditCard { get; set; }
+
+        public DbSet<Address> Address {get; set;}
     }
 }

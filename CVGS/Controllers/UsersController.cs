@@ -225,7 +225,7 @@ namespace CVGS.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.ID == id);
+            return _context.User.Any(e => e.Id == id);
         }
 
         public String GetVerificationToken()
@@ -283,10 +283,10 @@ namespace CVGS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> VerifyChangePassword([Bind("ID, VerificationToken, Password")] User u)
+        public async Task<IActionResult> VerifyChangePassword([Bind("Id, VerificationToken, Password")] User u)
         {
            
-            User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.ID == u.ID);
+            User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.Id == u.Id);
 
           
             if (user == null) { 

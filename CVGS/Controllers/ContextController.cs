@@ -25,13 +25,13 @@ namespace CVGS.Controllers
 
         public async Task<User> GetLoggedInUser()
         {
-            return await context.User.FirstOrDefaultAsync((u) => u.ID == GetUserLoggedInId());
+            return await context.User.FirstOrDefaultAsync((u) => u.Id == GetUserLoggedInId());
         }
 
         public void LoginUser(User user)
         {
             //Set login session
-            HttpContext.Session.SetInt32("user_id", user.ID);
+            HttpContext.Session.SetInt32("user_id", user.Id);
         }
 
         public ActionResult LogoutUser()

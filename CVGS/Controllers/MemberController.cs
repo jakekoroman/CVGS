@@ -52,7 +52,7 @@ namespace CVGS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile([Bind("ID,FirstName, LastName, Gender, BirthDate, ReceivePromomotionalEmails")] User user)
+        public async Task<IActionResult> Profile([Bind("Id,FirstName, LastName, Gender, BirthDate, ReceivePromomotionalEmails")] User user)
         {
 
 
@@ -94,7 +94,7 @@ namespace CVGS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Preferences([Bind("ID,FavoritePlatform, FavoriteGameCategory")] User user)
+        public async Task<IActionResult> Preferences([Bind("Id,FavoritePlatform, FavoriteGameCategory")] User user)
         {
             User u = await GetLoggedInUser();
             u.FavoriteGameCategory = user.FavoriteGameCategory;
@@ -132,7 +132,7 @@ namespace CVGS.Controllers
             }
 
             User u = await GetLoggedInUser();
-            card.UserId = u.ID;
+            card.UserId = u.Id;
             try
             {
                 base.context.Add(card);
@@ -161,10 +161,10 @@ namespace CVGS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword([Bind("ID, Password")] User u)
+        public async Task<IActionResult> ChangePassword([Bind("Id, Password")] User u)
         {
 
-            User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.ID == u.ID);
+            User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.Id == u.Id);
 
 
             if (user == null)
@@ -184,7 +184,7 @@ namespace CVGS.Controllers
 
         public Address GetAddress(User user, bool shipping)
         {
-            var addresses = user.Addresses.ToArray();
+            var addresses = base.context.Address.Where((a) => a.UserId == user.Id).ToArray();
             if (shipping && addresses.Length >= 1) 
             {
                 return addresses[0];
@@ -193,7 +193,7 @@ namespace CVGS.Controllers
             {
                 return addresses[1];
             }
-            return null;
+            return new Address();
         }
 
         public async Task<IActionResult> Address()
@@ -216,23 +216,33 @@ namespace CVGS.Controllers
 
             User u = await GetLoggedInUser();
 
-            foreach(Address a in u.Addresses)
+            var addresses = base.context.Address.Where((a) => a.UserId == u.Id).ToArray();
+            foreach(Address a in addresses)
             {
                  base.context.Remove(a);
                 await base.context.SaveChangesAsync();
             }
 
-            u.Addresses.Clear();
 
-            u.Addresses.Add(vm.ShippingAddress);
-        
-            if (vm.SameAddress)
+            vm.ShippingAddress.UserId = u.Id;
+            vm.MailingAddress.UserId= u.Id;
+            if (vm.ShippingAddress.Id == 0)
             {
-                u.Addresses.Add(vm.ShippingAddress);
+                base.context.Add(vm.ShippingAddress);
+            } else
+            {
+                base.context.Update(vm.ShippingAddress);
             }
-            base.context.Update(u);
+            if (vm.MailingAddress.Id == 0)
+            {
+                base.context.Add(vm.MailingAddress);
+            } else
+            {
+                base.context.Update(vm.MailingAddress);
+            }
+
             await base.context.SaveChangesAsync();
-            ViewBag.SuccessMessage = "Successfully updated your address information! " + vm.ShippingAddress.City;
+            ViewBag.SuccessMessage = "Successfully updated your address information!";
             return View(vm);
         }
     }
