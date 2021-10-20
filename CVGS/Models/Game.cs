@@ -11,6 +11,19 @@ namespace CVGS.Models
         public int Id { get; set; }
 
         public String Name { get; set; }
+
+        public String Description { get; set; }
+
+        public String Developer { get; set; }
+
+        public String Genre { get; set; }
+
+        public String Platform { get; set; }
+
+        public DateTime ReleaseDate { get; set; }
+
+        public double Price { get; set; }
+
         public ICollection<GameReview> Reviews { get; set; }
 
         public static readonly List<string> Categories = new List<string>()

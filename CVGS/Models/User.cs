@@ -28,6 +28,8 @@ namespace CVGS.Models
 
         public DateTime BirthDate { get; set; }
 
+        public DateTime JoinDate { get; set; }
+
         public String Gender { get; set; }
 
         [Required]

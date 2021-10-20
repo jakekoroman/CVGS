@@ -174,7 +174,7 @@ namespace CVGS.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("FirstName,LastName,DisplayName,BirthDate,Email,Password,CaptchaId,CaptchaQuestion,CaptchaAnswer")] User user)
+        public async Task<IActionResult> Register([Bind("FirstName,LastName,DisplayName,BirthDate,Email,Password,CaptchaId,CaptchaQuestion,CaptchaAnswer,JoinDate")] User user)
         {
 
 
@@ -216,11 +216,12 @@ namespace CVGS.Controllers
             user.Email = user.Email.ToLower();
 
             user.VerififcationToken = GetVerificationToken();
-                SendEmail(user.Email, "Account Activation", "Welcome, " + user.FirstName + ", Please activate your account by visitng the url: https://localhost:44346/Users/ActivateAccount?verificationToken=" + user.VerififcationToken);
-                user.UserRole = "MEMBER";
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            SendEmail(user.Email, "Account Activation", "Welcome, " + user.FirstName + ", Please activate your account by visitng the url: https://localhost:44346/Users/ActivateAccount?verificationToken=" + user.VerififcationToken);
+            user.UserRole = "MEMBER";
+            user.JoinDate = DateTime.UtcNow;
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)

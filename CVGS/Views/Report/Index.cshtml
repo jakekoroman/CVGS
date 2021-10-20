@@ -1,14 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Reports";
 }
 
 
+<h1>View Reports</h1>
+
 <div>
+    <ul>
+        <li><a asp-action="GameList">Game List Report</a></li>
+        <li><a asp-action="GameDetail">Game Detail Report</a></li>
+        <li><a asp-action="MemberList">Member List Report</a></li>
+        <li><a asp-action="MemberDetail">Member Detail Report</a></li>
+        <li><a asp-action="WishList">Wish List Report</a></li>
+        <li><a asp-action="Sales">Sales Report</a></li>
 
-    <h1>View Reports</h1>
-
-   
-
+    </ul>
 </div>

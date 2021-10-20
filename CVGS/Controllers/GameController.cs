@@ -46,6 +46,8 @@ namespace CVGS.Controllers
         // GET: Game/Create
         public IActionResult Create()
         {
+            ViewData["Platform"] = new SelectList(CVGS.Models.User.Platforms);
+            ViewData["Genre"] = new SelectList(CVGS.Models.Game.Categories);
             return View();
         }
 
@@ -54,7 +56,7 @@ namespace CVGS.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Game game)
+        public async Task<IActionResult> Create([Bind("Id,Name,ReleaseDate,Price,Description,Developer,Genre,Platform")] Game game)
         {
             if (ModelState.IsValid)
             {
