@@ -18,6 +18,6 @@ namespace CVGS.Models
         //The user who left the review
         public int UserId { get; set; }
 
-        public User User;
+        public bool Approved { get; set; }
     }
 }

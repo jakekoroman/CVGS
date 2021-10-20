@@ -1,5 +1,4 @@
-﻿
-@model User
+﻿@model User
 @{
 
     ViewData["Title"] = "Preferences";
@@ -25,15 +24,15 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label>Favorite Game Platforms</label>
-                <input asp-for="FavoritePlatform" class="form-control" />
+                <select asp-for="FavoritePlatform" class ="form-control" asp-items="ViewBag.Platforms"></select>
                 <span asp-validation-for="FavoritePlatform" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <labe>Favorite Game Categories</labe>
-                <input asp-for="FavoriteGameCategory" class="form-control" />
+                <label>Favorite Game Categories</label>
+                <select asp-for="FavoriteGameCategory" class="form-control" asp-items="ViewBag.Categories"></select>
                 <span asp-validation-for="FavoriteGameCategory" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

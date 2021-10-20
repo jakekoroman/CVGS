@@ -7,22 +7,39 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CVGS.Data;
 using CVGS.Models;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Http;
 
 namespace CVGS.Controllers
 {
     public class GameReviewsController : Controller
     {
         private readonly DBContext _context;
+        private readonly INotyfService _notyf;
 
-        public GameReviewsController(DBContext context)
+        public GameReviewsController(DBContext context, INotyfService notyf)
         {
             _context = context;
+            // injects toast support
+            _notyf = notyf;
         }
 
         // GET: GameReviews
         public async Task<IActionResult> Index()
         {
             var dBContext = _context.GameReview.Include(g => g.Game);
+
+            if (HttpContext.Session.GetInt32("approved") == 1)
+            {
+                _notyf.Success("Approved!", 2);
+                HttpContext.Session.Remove("approved");
+            }
+            else if (HttpContext.Session.GetInt32("approved") == 0)
+            {
+                _notyf.Error("Deleted!", 2);
+                HttpContext.Session.Remove("approved");
+            }
+
             return View(await dBContext.ToListAsync());
         }
 
@@ -49,6 +66,7 @@ namespace CVGS.Controllers
         public IActionResult Create()
         {
             ViewData["GameId"] = new SelectList(_context.Game, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.User, "ID", "ID");
             return View();
         }
 
@@ -57,7 +75,7 @@ namespace CVGS.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,GameId")] GameReview gameReview)
+        public async Task<IActionResult> Create([Bind("Id,Content,GameId,UserId")] GameReview gameReview)
         {
             if (ModelState.IsValid)
             {
@@ -149,6 +167,29 @@ namespace CVGS.Controllers
             var gameReview = await _context.GameReview.FindAsync(id);
             _context.GameReview.Remove(gameReview);
             await _context.SaveChangesAsync();
+            HttpContext.Session.SetInt32("approved", 0);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Approve(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var gameReview = await _context.GameReview.Include(g => g.Game).FirstOrDefaultAsync(m => m.Id == id);
+
+            if (gameReview == null)
+            {
+                return NotFound();
+            }
+
+            gameReview.Approved = true;
+            _context.Update(gameReview);
+            await _context.SaveChangesAsync();
+
+            // Sets session variable to play the toast notification
+            HttpContext.Session.SetInt32("approved", 1);
+
             return RedirectToAction(nameof(Index));
         }
 

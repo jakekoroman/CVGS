@@ -71,6 +71,14 @@ namespace CVGS.Models
             return UserRole == "EMPLOYEE";
         }
 
+        public static readonly List<string> Platforms = new List<string>()
+        {
+            "PC",
+            "Xbox",
+            "Playstation",
+            "Nintendo Switch"
+        };
+
     }
 }
 

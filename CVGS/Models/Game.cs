@@ -12,5 +12,22 @@ namespace CVGS.Models
 
         public String Name { get; set; }
         public ICollection<GameReview> Reviews { get; set; }
+
+        public static readonly List<string> Categories = new List<string>()
+        {
+            "Sandbox",
+            "RTS",
+            "Shooters",
+            "MOBA",
+            "RPG",
+            "Simulation",
+            "Sport",
+            "Puzzle",
+            "Party",
+            "Action Adventure",
+            "Horror",
+            "Suvival",
+            "Platformer"
+        };
     }
 }

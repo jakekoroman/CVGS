@@ -86,6 +86,9 @@ namespace CVGS.Controllers
             {
                 return RedirectToAction("Index", "Employee");
             }
+
+            ViewData["Platforms"] = new SelectList(CVGS.Models.User.Platforms);
+            ViewData["Categories"] = new SelectList(CVGS.Models.Game.Categories);
             return View(user);
         }
 
@@ -93,8 +96,6 @@ namespace CVGS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Preferences([Bind("ID,FavoritePlatform, FavoriteGameCategory")] User user)
         {
-
-
             User u = await GetLoggedInUser();
             u.FavoriteGameCategory = user.FavoriteGameCategory;
             u.FavoritePlatform = user.FavoritePlatform;

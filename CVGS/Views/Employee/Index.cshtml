@@ -1,12 +1,10 @@
-﻿
-
-
-
-<div className="">
+﻿<div className="">
     <h1>Employee Panel</h1>
 
-    <a href="/Event">Events</a>
-    <a href="/Report">Reports</a>
-    <a href="/Game">Games</a>
-    <a href="/Review">Reviews</a>
+    <ul>
+        <li><a href="/Event">Events</a></li>
+        <li><a href="/Report">Reports</a></li>
+        <li><a href="/Game">Games</a></li>
+        <li><a asp-controller="GameReviews" asp-action="Index">Reviews</a></li>
+    </ul>
 </div>
