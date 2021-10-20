@@ -9,6 +9,7 @@ using CVGS.Data;
 using CVGS.Models;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
 
 namespace CVGS.Controllers
 {
@@ -57,6 +58,28 @@ namespace CVGS.Controllers
                 return RedirectToAction("Index", "Member");
             }
             return RedirectToAction("Index", "Employee");
+        }
+
+        //prog3050visionary
+        //Prog3050Visionary___1234
+
+        public void SendEmail(String to, String subject, String body)
+        {
+            String from = "prog3050visionary@gmail.com";
+            MailMessage mail = new MailMessage();
+            mail.To.Add(to);
+            mail.From = new MailAddress(from);
+            mail.Subject = subject;
+            mail.Body = body;
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential(from, "Prog3050Visionary___1234"); // Enter seders User name and password  
+            smtp.EnableSsl = true;
+            smtp.Send(mail);
+
         }
     }
 }

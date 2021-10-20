@@ -1,10 +1,18 @@
 ﻿@model User
 
+
+
+@{
+    ViewData["Title"] = "Member Portal";
+}
+
 <div>
-    <h1>Welcome, @Model.FirstName @Model.LastName </h1>
+    <h1>Welcome, @Model.DisplayName </h1>
 
     <a href="/Member/Profile">Profile</a>
     <a href="/Member/Preferences">Preferences</a>
     <a href="/Member/CreditCard">Credit Cards</a>
+    <a href="/Member/ChangePassword">Change Password</a>
+    <a href="/Member/Address">Addresses</a>
 </div>
 

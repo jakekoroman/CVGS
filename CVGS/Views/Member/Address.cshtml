@@ -1,0 +1,96 @@
+﻿@model CVGS.Models.AddressViewModel
+
+@{
+    ViewData["Title"] = "Manage Addresses";
+}
+
+<h4>Manage Addresses</h4>
+
+<hr />
+
+<div>
+    
+@if (ViewBag.SuccessMessage!= null)
+{
+    <div class="alert alert-success">
+        <p>@ViewBag.SuccessMessage</p>
+    </div>
+}
+
+    <form asp-action="Address">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+        <h4>Shipping Address</h4>
+        <div class="form-group">
+            <label asp-for="ShippingAddress.City" class="control-label"></label>
+            <input asp-for="ShippingAddress.City" class="form-control" />
+            <span asp-validation-for="ShippingAddress.City" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShippingAddress.Country" class="control-label"></label>
+            <input asp-for="ShippingAddress.Country" class="form-control" />
+            <span asp-validation-for="ShippingAddress.Country" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShippingAddress.Street" class="control-label"></label>
+            <input asp-for="ShippingAddress.Street" class="form-control" />
+            <span asp-validation-for="ShippingAddress.Street" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShippingAddress.Province" class="control-label"></label>
+            <input asp-for="ShippingAddress.Province" class="form-control" />
+            <span asp-validation-for="ShippingAddress.Province" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShippingAddress.PostalCode" class="control-label"></label>
+            <input asp-for="ShippingAddress.PostalCode" class="form-control" />
+            <span asp-validation-for="ShippingAddress.PostalCode" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <h4>Mailing Address</h4>
+        <div class="form-group">
+            <label asp-for="MailingAddress.City" class="control-label"></label>
+            <input asp-for="MailingAddress.City" class="form-control" />
+            <span asp-validation-for="MailingAddress.City" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailingAddress.Country" class="control-label"></label>
+            <input asp-for="MailingAddress.Country" class="form-control" />
+            <span asp-validation-for="MailingAddress.Country" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailingAddress.Street" class="control-label"></label>
+            <input asp-for="MailingAddress.Street" class="form-control" />
+            <span asp-validation-for="MailingAddress.Street" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailingAddress.Province" class="control-label"></label>
+            <input asp-for="MailingAddress.Province" class="form-control" />
+            <span asp-validation-for="MailingAddress.Province" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailingAddress.PostalCode" class="control-label"></label>
+            <input asp-for="MailingAddress.PostalCode" class="form-control" />
+            <span asp-validation-for="MailingAddress.PostalCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+           <label>Use Same as Shipping</label>
+            <input asp-for="SameAddress" class="form-control" />
+            <span asp-validation-for="SameAddress" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

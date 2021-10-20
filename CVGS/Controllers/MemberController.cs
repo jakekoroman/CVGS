@@ -17,7 +17,7 @@ namespace CVGS.Controllers
 
     {
 
-        public MemberController(DBContext context): base(context)
+        public MemberController(DBContext context) : base(context)
         {
 
         }
@@ -27,7 +27,7 @@ namespace CVGS.Controllers
             {
                 return LogoutUser();
             }
-          
+
             User user = await GetLoggedInUser();
             if (user.IsEmployee())
             {
@@ -63,15 +63,15 @@ namespace CVGS.Controllers
             u.BirthDate = user.BirthDate;
             u.ReceivePromomotionalEmails = user.ReceivePromomotionalEmails;
             try
-                {
-                    base.context.Update(u);
-                    await base.context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+            {
+                base.context.Update(u);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -126,6 +126,10 @@ namespace CVGS.Controllers
         public async Task<IActionResult> CreditCard([Bind("CardNumber")] CreditCard card)
         {
 
+            if (!ModelState.IsValid)
+            {
+                return View(card);
+            }
 
             User u = await GetLoggedInUser();
             card.UserId = u.ID;
@@ -141,7 +145,96 @@ namespace CVGS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-    
+        public async Task<IActionResult> ChangePassword()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            var user = await GetLoggedInUser();
+            if (user == null)
+            {
+                return NotFound("There was no user found with that verification token!");
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword([Bind("ID, Password")] User u)
+        {
+
+            User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.ID == u.ID);
+
+
+            if (user == null)
+            {
+                return NotFound("There was no user found.");
+            }
+
+
+
+            ViewBag.SuccessMessage = "Successfully changed your password! ";
+
+            user.Password = u.Password;
+            base.context.Update(user);
+            await base.context.SaveChangesAsync();
+            return View(user);
+        }
+
+        public Address GetAddress(User user, bool shipping)
+        {
+            var addresses = user.Addresses.ToArray();
+            if (shipping && addresses.Length >= 1) 
+            {
+                return addresses[0];
+            } 
+            if (!shipping && addresses.Length >= 2)
+            {
+                return addresses[1];
+            }
+            return null;
+        }
+
+        public async Task<IActionResult> Address()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            User user = await GetLoggedInUser();
+            AddressViewModel vm = new AddressViewModel();
+            vm.MailingAddress = GetAddress(user, false);
+            vm.ShippingAddress = GetAddress(user, true);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Address([Bind("ShippingAddress, MailingAddress, SameAddress")] AddressViewModel vm)
+        {
+
+            User u = await GetLoggedInUser();
+
+            foreach(Address a in u.Addresses)
+            {
+                 base.context.Remove(a);
+                await base.context.SaveChangesAsync();
+            }
+
+            u.Addresses.Clear();
+
+            u.Addresses.Add(vm.ShippingAddress);
+        
+            if (vm.SameAddress)
+            {
+                u.Addresses.Add(vm.ShippingAddress);
+            }
+            base.context.Update(u);
+            await base.context.SaveChangesAsync();
+            ViewBag.SuccessMessage = "Successfully updated your address information! " + vm.ShippingAddress.City;
+            return View(vm);
+        }
     }
 
 

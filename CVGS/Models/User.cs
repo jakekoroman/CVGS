@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CVGS.Controllers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,36 +26,21 @@ namespace CVGS.Models
         [Required]
         public String DisplayName { get; set; }
 
-        [Required]
         public DateTime BirthDate { get; set; }
 
-        
         public String Gender { get; set; }
 
-       [Required]
+        [Required]
         public String Email { get; set; }
 
+        [Required]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{6,20}$", ErrorMessage = "Minimum 6 Max 20 characters atleast 1 Alphabet, 1 Number and 1 Special Character and avoid space")]
         [DataType(DataType.Password)]
-        [StringLength(100, ErrorMessage = "Pass \"{0}\" must have no less {2} chars.", MinimumLength = 8)]
         public String Password { get; set; }
 
+        public ICollection<Address> Addresses { get; set; }
+
         public String VerififcationToken { get; set; }
-
-        [Required]
-        public String Country { get; set; }
-
-        [Required]
-        public String City { get; set; }
-
-        [Required]
-
-        public String PostalCode { get; set; }
-
-        [Required]
-        public String Street { get; set; }
-
-        [Required]
-        public String Province { get; set; }
 
         public Boolean ReceivePromomotionalEmails { get; set; }
 
@@ -62,9 +48,22 @@ namespace CVGS.Models
 
         public String FavoriteGameCategory { get; set; }
 
+        public int LoginAttempts { get; set; }
+
+        public DateTime LockedOut { get; set; }
+
         public ICollection<GameReview> Reviews { get; set; }
 
         public ICollection<CreditCard> CreditCards { get; set; }
+
+        [NotMapped]
+        public int CaptchaId { get; set; }
+
+        [NotMapped]
+        public String CaptchaAnswer { get; set; }
+
+        [NotMapped]
+        public String CaptchaQuestion { get; set; }
 
         public bool IsEmployee()
         {

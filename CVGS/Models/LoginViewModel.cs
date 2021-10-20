@@ -1,3 +1,4 @@
+using CVGS.Controllers;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,5 @@ namespace CVGS.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-     
     }
 }
