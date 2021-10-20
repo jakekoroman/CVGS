@@ -27,7 +27,13 @@ namespace CVGS.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Developer = table.Column<string>(nullable: true),
+                    Genre = table.Column<string>(nullable: true),
+                    Platform = table.Column<string>(nullable: true),
+                    ReleaseDate = table.Column<DateTime>(nullable: false),
+                    Price = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,13 +44,14 @@ namespace CVGS.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserRole = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     DisplayName = table.Column<string>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
+                    JoinDate = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
@@ -57,7 +64,7 @@ namespace CVGS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.ID);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,7 +87,7 @@ namespace CVGS.Migrations
                         name: "FK_Address_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -100,7 +107,7 @@ namespace CVGS.Migrations
                         name: "FK_CreditCard_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -128,7 +135,7 @@ namespace CVGS.Migrations
                         name: "FK_GameReview_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

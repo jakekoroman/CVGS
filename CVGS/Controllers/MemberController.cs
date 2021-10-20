@@ -209,6 +209,19 @@ namespace CVGS.Controllers
             return View(vm);
         }
 
+        public async  Task<dynamic> GetReportData(int type)
+        {
+            switch (type) {
+                case 1:
+                    return await base.context.Event.ToListAsync();
+                case 2:
+                    return await base.context.Game.ToListAsync();
+                default:
+                    return null;
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Address([Bind("ShippingAddress, MailingAddress, SameAddress")] AddressViewModel vm)
@@ -219,13 +232,22 @@ namespace CVGS.Controllers
             var addresses = base.context.Address.Where((a) => a.UserId == u.Id).ToArray();
             foreach(Address a in addresses)
             {
-                 base.context.Remove(a);
+                base.context.Remove(a);
                 await base.context.SaveChangesAsync();
             }
 
 
             vm.ShippingAddress.UserId = u.Id;
             vm.MailingAddress.UserId= u.Id;
+
+            if (vm.SameAddress)
+            {
+                vm.MailingAddress.City = vm.ShippingAddress.City;
+                vm.MailingAddress.Country = vm.ShippingAddress.Country;
+                vm.MailingAddress.PostalCode = vm.ShippingAddress.PostalCode;
+                vm.MailingAddress.Province = vm.ShippingAddress.Province;
+                vm.MailingAddress.Street = vm.ShippingAddress.Street;
+            }
             if (vm.ShippingAddress.Id == 0)
             {
                 base.context.Add(vm.ShippingAddress);
@@ -243,7 +265,7 @@ namespace CVGS.Controllers
 
             await base.context.SaveChangesAsync();
             ViewBag.SuccessMessage = "Successfully updated your address information!";
-            return View(vm);
+            return RedirectToAction(nameof(Index));
         }
     }
 

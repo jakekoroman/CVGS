@@ -32,6 +32,7 @@ namespace CVGS.Controllers
         {
             //Set login session
             HttpContext.Session.SetInt32("user_id", user.Id);
+            HttpContext.Session.SetString("role", user.UserRole);
         }
 
         public ActionResult LogoutUser()
