@@ -1,0 +1,35 @@
+@model IEnumerable<CVGS.Models.User>
+
+@{
+    ViewData["Title"] = "Wish List Report";
+}
+
+<table id="gameList" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.DisplayName)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>Game Wish List</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    UNIMPLEMENTED
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
