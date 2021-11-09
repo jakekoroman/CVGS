@@ -1,18 +1,18 @@
 ﻿@model User
 
-
-
 @{
     ViewData["Title"] = "Member Portal";
 }
 
 <div>
     <h1>Welcome, @Model.DisplayName </h1>
-
-    <a href="/Member/Profile">Profile</a>
-    <a href="/Member/Preferences">Preferences</a>
-    <a href="/Member/CreditCard">Credit Cards</a>
-    <a href="/Member/ChangePassword">Change Password</a>
-    <a href="/Member/Address">Addresses</a>
+    <ul>
+        <li><a href="/Member/Profile">Profile</a></li>
+        <li><a href="/Member/Preferences">Preferences</a></li>
+        <li><a href="/Member/CreditCard">Credit Cards</a></li>
+        <li><a href="/Member/ChangePassword">Change Password</a></li>
+        <li><a href="/Member/Address">Addresses</a></li>
+        <li><a href="/Member/WishList">Wish List</a></li>
+    </ul>
 </div>
 

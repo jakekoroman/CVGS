@@ -219,6 +219,27 @@ namespace CVGS.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("CVGS.Models.WishList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GameName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WishList");
+                });
+
             modelBuilder.Entity("CVGS.Models.Address", b =>
                 {
                     b.HasOne("CVGS.Models.User", "User")

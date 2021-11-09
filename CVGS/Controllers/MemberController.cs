@@ -267,7 +267,63 @@ namespace CVGS.Controllers
             ViewBag.SuccessMessage = "Successfully updated your address information!";
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> WishList()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+            User user = await GetLoggedInUser();
+
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+
+            ViewBag.WishList = context.WishList.Where(x => x.UserId == user.Id);
+
+            ViewData["GameNames"] = new SelectList(context.Game.Select(x => x.Name));
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> WishList([Bind("Id, GameId, UserId, GameName")] WishList wishList)
+        {
+            User u = await GetLoggedInUser();
+            var dbContext = context.WishList.Where(x => x.UserId == u.Id);
+            wishList.UserId = u.Id;
+            wishList.GameId = context.Game.Where(x => x.Name == wishList.GameName).FirstOrDefault().Id;
+
+            try
+            {
+                base.context.Update(wishList);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            ViewData["GameNames"] = new SelectList(context.Game.Select(x => x.Name));
+            ViewBag.WishList = context.WishList.Where(x => x.UserId == u.Id);
+
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteWishListItem(int? id)
+        {
+            User u = await GetLoggedInUser();
+
+            var wishList = await context.WishList.FindAsync(id);
+            context.WishList.Remove(wishList);
+            await context.SaveChangesAsync();
+
+            ViewData["GameNames"] = new SelectList(context.Game.Select(x => x.Name));
+            ViewBag.WishList = context.WishList.Where(x => x.UserId == u.Id);
+            return RedirectToAction("WishList");
+        }
     }
-
-
 }

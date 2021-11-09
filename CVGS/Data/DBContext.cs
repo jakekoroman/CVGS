@@ -20,6 +20,8 @@ namespace CVGS.Data
 
         public DbSet<CreditCard> CreditCard { get; set; }
 
-        public DbSet<Address> Address {get; set;}
+        public DbSet<Address> Address { get; set; }
+
+        public DbSet<WishList> WishList { get; set; }
     }
 }
