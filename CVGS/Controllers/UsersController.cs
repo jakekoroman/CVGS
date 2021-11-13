@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 namespace CVGS.Controllers
 {
 
-   public class Captcha
+    public class Captcha
     {
         public int id;
         public String question;
@@ -38,7 +38,7 @@ namespace CVGS.Controllers
 
         private readonly Random random = new Random();
 
-        public UsersController(DBContext context): base(context)
+        public UsersController(DBContext context) : base(context)
         {
             _context = context;
         }
@@ -75,19 +75,19 @@ namespace CVGS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Email, Password")] LoginViewModel vm)
         {
-            
+
             if (ModelState.IsValid)
             {
 
 
                 var user = await _context.User.FirstOrDefaultAsync((u) => u.Email == vm.Email);
-              
+
                 if (user == null)
                 {
                     ViewBag.ErrorMessage = "There is no user account with that email.";
                     return View(vm);
                 }
-              
+
                 if (user.LoginAttempts >= 3 && user.LockedOut != null)
                 {
                     TimeSpan timeDiff = DateTime.Now - user.LockedOut;
@@ -97,7 +97,7 @@ namespace CVGS.Controllers
                         return View(vm);
                     }
                 }
-                
+
                 if (vm.Password != user.Password)
                 {
                     await AddLoginAttempt(user);
@@ -201,7 +201,7 @@ namespace CVGS.Controllers
                 return View(user);
             }
 
-            if (await base.context.User.FirstOrDefaultAsync((u) => u.DisplayName== user.DisplayName) != null)
+            if (await base.context.User.FirstOrDefaultAsync((u) => u.DisplayName == user.DisplayName) != null)
             {
                 ViewBag.ErrorMessage = "That display name is already taken.";
                 return View(user);
@@ -221,6 +221,18 @@ namespace CVGS.Controllers
             user.JoinDate = DateTime.UtcNow;
             _context.Add(user);
             await _context.SaveChangesAsync();
+
+            // Creates the new users friends and family list
+            // Has to be done after it is pushed into the db so the ID can be populated
+            int userId = _context.User.Where(x => x.Email == user.Email).FirstOrDefault().Id;
+            FriendList fr = new FriendList();
+            FamilyList fl = new FamilyList();
+            fr.UserId = userId;
+            fl.UserId = userId;
+            _context.Add(fr);
+            _context.Add(fl);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -286,12 +298,13 @@ namespace CVGS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyChangePassword([Bind("Id, VerificationToken, Password")] User u)
         {
-           
+
             User user = await base.context.User.FirstOrDefaultAsync((uu) => uu.Id == u.Id);
 
-          
-            if (user == null) { 
-              return NotFound("There was no user found.");
+
+            if (user == null)
+            {
+                return NotFound("There was no user found.");
             }
 
             if (user.VerififcationToken == null)
