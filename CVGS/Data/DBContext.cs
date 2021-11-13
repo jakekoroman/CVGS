@@ -23,5 +23,13 @@ namespace CVGS.Data
         public DbSet<Address> Address { get; set; }
 
         public DbSet<WishList> WishList { get; set; }
+
+        public DbSet<FriendList> FriendList { get; set; }
+
+        public DbSet<Friend> Friend { get; set; }
+
+        public DbSet<FamilyList> FamilyList { get; set; }
+
+        public DbSet<Family> Family { get; set; }
     }
 }
