@@ -1,0 +1,54 @@
+﻿@model SearchGameViewModel;
+
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="Games">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label>Name:</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+
+
+        @if (Model.Games != null && Model.Games.Count > 0)
+        {
+            <div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Games
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Games)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    <a asp-action="ViewGame" asp-route-id="@item.Id">ViewGame</a> 
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+

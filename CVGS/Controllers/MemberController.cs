@@ -475,5 +475,25 @@ namespace CVGS.Controllers
             return View(currentFamily);
         }
 
+        public async Task<IActionResult> Games()
+        {
+            SearchGameViewModel model = new SearchGameViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Games([Bind("Name")] SearchGameViewModel model)
+        {
+            model.Games = await context.Game.Where((game) => game.Name.ToLower().Contains(model.Name)).ToListAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> ViewGame(int? id)
+        {
+            Game game = await base.context.Game.FirstOrDefaultAsync((game) => game.Id == id);
+            return View(game);
+        }
+
     }
 }
