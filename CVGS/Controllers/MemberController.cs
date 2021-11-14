@@ -185,10 +185,10 @@ namespace CVGS.Controllers
         public Address GetAddress(User user, bool shipping)
         {
             var addresses = base.context.Address.Where((a) => a.UserId == user.Id).ToArray();
-            if (shipping && addresses.Length >= 1) 
+            if (shipping && addresses.Length >= 1)
             {
                 return addresses[0];
-            } 
+            }
             if (!shipping && addresses.Length >= 2)
             {
                 return addresses[1];
@@ -209,9 +209,10 @@ namespace CVGS.Controllers
             return View(vm);
         }
 
-        public async  Task<dynamic> GetReportData(int type)
+        public async Task<dynamic> GetReportData(int type)
         {
-            switch (type) {
+            switch (type)
+            {
                 case 1:
                     return await base.context.Event.ToListAsync();
                 case 2:
@@ -230,7 +231,7 @@ namespace CVGS.Controllers
             User u = await GetLoggedInUser();
 
             var addresses = base.context.Address.Where((a) => a.UserId == u.Id).ToArray();
-            foreach(Address a in addresses)
+            foreach (Address a in addresses)
             {
                 base.context.Remove(a);
                 await base.context.SaveChangesAsync();
@@ -238,7 +239,7 @@ namespace CVGS.Controllers
 
 
             vm.ShippingAddress.UserId = u.Id;
-            vm.MailingAddress.UserId= u.Id;
+            vm.MailingAddress.UserId = u.Id;
 
             if (vm.SameAddress)
             {
@@ -251,14 +252,16 @@ namespace CVGS.Controllers
             if (vm.ShippingAddress.Id == 0)
             {
                 base.context.Add(vm.ShippingAddress);
-            } else
+            }
+            else
             {
                 base.context.Update(vm.ShippingAddress);
             }
             if (vm.MailingAddress.Id == 0)
             {
                 base.context.Add(vm.MailingAddress);
-            } else
+            }
+            else
             {
                 base.context.Update(vm.MailingAddress);
             }
@@ -266,6 +269,12 @@ namespace CVGS.Controllers
             await base.context.SaveChangesAsync();
             ViewBag.SuccessMessage = "Successfully updated your address information!";
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> OtherUserWishList(int? userId)
+        {
+            ViewBag.Name = context.User.Where(x => x.Id == userId).FirstOrDefault().DisplayName;
+            return View(await context.WishList.Where(x => x.UserId == userId).ToListAsync());
         }
 
         public async Task<IActionResult> WishList()
@@ -325,5 +334,146 @@ namespace CVGS.Controllers
             ViewBag.WishList = context.WishList.Where(x => x.UserId == u.Id);
             return RedirectToAction("WishList");
         }
+
+        private List<String> GetFriendUserNames(User user)
+        {
+            var friendList = context.FriendList.Where(x => x.UserId == user.Id).FirstOrDefault();
+            List<Friend> currentFriends = context.Friend.Where(x => x.FriendListId == friendList.Id).ToList();
+
+            var userNames = context.User.Select(x => x.DisplayName).ToList();
+            userNames.Remove(user.DisplayName);
+
+            foreach (Friend f in currentFriends)
+            {
+                userNames.Remove(f.UserName);
+            }
+
+            return userNames.ToList();
+        }
+
+        public async Task<IActionResult> AddFriend()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+
+            User user = await GetLoggedInUser();
+
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+
+            ViewData["UserNames"] = new SelectList(GetFriendUserNames(user));
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFriend([Bind("Id, FriendListId, UserId, UserName")] Friend friend)
+        {
+            User u = await GetLoggedInUser();
+
+            int friendUserId = context.User.Where(x => x.DisplayName == friend.UserName).FirstOrDefault().Id;
+            int friendListId = context.FriendList.Where(x => x.UserId == u.Id).FirstOrDefault().Id;
+
+            friend.UserId = friendUserId;
+            friend.FriendListId = friendListId;
+
+            try
+            {
+                base.context.Update(friend);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            ViewData["UserNames"] = new SelectList(GetFriendUserNames(u));
+
+            return View();
+        }
+
+        public async Task<IActionResult> Friends()
+        {
+            User user = await GetLoggedInUser();
+            var friendList = context.FriendList.Where(x => x.UserId == user.Id).FirstOrDefault();
+            List<Friend> currentFriend = context.Friend.Where(x => x.FriendListId == friendList.Id).ToList();
+            return View(currentFriend);
+        }
+
+        private List<String> GetFamilyUserNames(User user)
+        {
+            var familyList = context.FamilyList.Where(x => x.UserId == user.Id).FirstOrDefault();
+            List<Family> currentFamily = context.Family.Where(x => x.FamilyListId == familyList.Id).ToList();
+
+            var userNames = context.User.Select(x => x.DisplayName).ToList();
+            userNames.Remove(user.DisplayName);
+
+            foreach (Family f in currentFamily)
+            {
+                userNames.Remove(f.UserName);
+            }
+
+            return userNames.ToList();
+        }
+
+        public async Task<IActionResult> AddFamily()
+        {
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+
+            User user = await GetLoggedInUser();
+
+            if (user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+
+            ViewData["UserNames"] = new SelectList(GetFamilyUserNames(user));
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFamily([Bind("Id, FamilyListId, UserId, UserName")] Family family)
+        {
+            User u = await GetLoggedInUser();
+
+            int familyUserId = context.User.Where(x => x.DisplayName == family.UserName).FirstOrDefault().Id;
+            int familyListId = context.FamilyList.Where(x => x.UserId == u.Id).FirstOrDefault().Id;
+
+            family.UserId = familyUserId;
+            family.FamilyListId = familyListId;
+
+            try
+            {
+                base.context.Update(family);
+                await base.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            ViewData["UserNames"] = new SelectList(GetFamilyUserNames(u));
+
+            return View();
+        }
+
+        public async Task<IActionResult> Family()
+        {
+            User user = await GetLoggedInUser();
+            var familyList = context.FamilyList.Where(x => x.UserId == user.Id).FirstOrDefault();
+            List<Family> currentFamily = context.Family.Where(x => x.FamilyListId == familyList.Id).ToList();
+            return View(currentFamily);
+        }
+
     }
 }

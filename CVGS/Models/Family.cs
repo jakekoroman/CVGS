@@ -13,5 +13,7 @@ namespace CVGS.Models
 
         // User ID of the family member 
         public int UserId { get; set; }
+
+        public String UserName { get; set; }
     }
 }

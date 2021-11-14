@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CVGS.Models.Family>
+
+@{
+    ViewData["Title"] = "Family Members";
+}
+
+<h1>Family Members</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                User Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    <a asp-action="OtherUserWishList" asp-route-userId="@item.UserId">View Wishlist</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

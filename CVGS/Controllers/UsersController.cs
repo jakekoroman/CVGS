@@ -263,7 +263,6 @@ namespace CVGS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword([Bind("Email")] User u)
         {
-
             var user = await base.context.User.FirstOrDefaultAsync((us) => us.Email.ToLower() == u.Email.ToLower());
             if (user == null)
             {
