@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,6 +27,12 @@ namespace CVGS.Models
 
         public ICollection<GameReview> Reviews { get; set; }
 
+        [NotMapped]
+        public GameRatings UserGameRating { get; set; }
+
+        [NotMapped]
+        public double OverAllRating { get; set; }
+
         public static readonly List<string> Categories = new List<string>()
         {
             "Sandbox",
@@ -42,5 +49,6 @@ namespace CVGS.Models
             "Suvival",
             "Platformer"
         };
+
     }
 }

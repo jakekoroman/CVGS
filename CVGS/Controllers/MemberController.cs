@@ -478,6 +478,7 @@ namespace CVGS.Controllers
         public async Task<IActionResult> Games()
         {
             SearchGameViewModel model = new SearchGameViewModel();
+            model.Games = await context.Game.ToListAsync();
             return View(model);
         }
 
@@ -486,13 +487,62 @@ namespace CVGS.Controllers
         public async Task<IActionResult> Games([Bind("Name")] SearchGameViewModel model)
         {
             model.Games = await context.Game.Where((game) => game.Name.ToLower().Contains(model.Name)).ToListAsync();
+            if (model.Name.Length == 0)
+            {
+                model.Games = await context.Game.ToListAsync();
+            }
             return View(model);
         }
 
         public async Task<IActionResult> ViewGame(int? id)
         {
             Game game = await base.context.Game.FirstOrDefaultAsync((game) => game.Id == id);
+            game.UserGameRating = await base.context.GameRatings.FirstOrDefaultAsync((rating) => rating.GameID == id && rating.UserId == GetUserLoggedInId());
+
+            List<GameRatings> ratings = await base.context.GameRatings.Where((game) => game.GameID == id).ToListAsync();
+
+            double total = 0;
+            foreach (GameRatings r in ratings)
+            {
+                total = r.Rating;
+            }
+            game.OverAllRating = total <= 0 ? 0 : total / ratings.Count;
             return View(game);
+        }
+
+
+        public IActionResult AddGameRating(int id)
+        {
+ 
+            GameRatings rating = new GameRatings();
+            rating.UserId = GetUserLoggedInId();
+            rating.GameID = id;
+            return View(rating);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddGameRating([Bind("UserId, GameID, Rating")] GameRatings r)
+        {
+            base.context.Add(r);
+            await base.context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> EditGameRating(int? id)
+        {
+            GameRatings rating = await base.context.GameRatings.FirstOrDefaultAsync((rating) => rating.GameID == id && rating.UserId == GetUserLoggedInId());
+            
+            return View(rating);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGameRating([Bind("Id, UserId, GameID, Rating")] GameRatings r)
+        {
+            base.context.Update(r);
+            await base.context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
     }

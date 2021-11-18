@@ -31,5 +31,7 @@ namespace CVGS.Data
         public DbSet<FamilyList> FamilyList { get; set; }
 
         public DbSet<Family> Family { get; set; }
+
+        public DbSet<GameRatings> GameRatings {get; set;}
     }
 }
