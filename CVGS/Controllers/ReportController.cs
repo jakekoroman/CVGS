@@ -21,9 +21,19 @@ namespace CVGS.Controllers
         {
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            if (!IsLoggedIn())
+            {
+                return LogoutUser();
+            }
+
+            User user = await GetLoggedInUser();
+            if (!user.IsEmployee())
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+            return View(user);
         }
 
         public async Task<IActionResult> GameList()

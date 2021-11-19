@@ -28,19 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211115155003_init.cs" />
+    <SourceGeneratorInput Remove="Migrations\20211118223347_ratings.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211115155003_init.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211115165842_rating-model-change.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211115165842_rating-model-change.Designer.cs" />
+    <SourceGeneratorInput Remove="Migrations\20211118223347_ratings.Designer.cs" />
   </ItemGroup>
 
 </Project>

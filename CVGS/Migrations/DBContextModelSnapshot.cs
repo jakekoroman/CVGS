@@ -95,6 +95,24 @@ namespace CVGS.Migrations
                     b.ToTable("Event");
                 });
 
+            modelBuilder.Entity("CVGS.Models.EventRegistry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventRegistry");
+                });
+
             modelBuilder.Entity("CVGS.Models.Family", b =>
                 {
                     b.Property<int>("Id")
