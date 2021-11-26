@@ -669,7 +669,7 @@ namespace CVGS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private List<String> GetAvailableEvents(User user)
+        private List<Event> GetAvailableEvents(User user)
         {
             List<int> registeredEventIds = context.EventRegistry.Where(x => x.UserId == user.Id).Select(x => x.EventId).ToList();
             List<Event> events = context.Event.ToList();
@@ -677,7 +677,7 @@ namespace CVGS.Controllers
 
             foreach (int eid in registeredEventIds)
             {
-                registeredEvents.Add(context.Event.Where(x => x.Id != eid).FirstOrDefault());
+                registeredEvents.Add(events.Where(x => x.Id == eid).FirstOrDefault());
             }
 
             foreach (Event e in registeredEvents)
@@ -685,21 +685,53 @@ namespace CVGS.Controllers
                 events.Remove(e);
             }
 
-            return events.Select(x => x.Name).ToList();
+            return events;
         }
 
         public async Task<IActionResult> RegisterForEvent()
         {
             User u = await GetLoggedInUser();
             // TODO: Implement
-            // Add select list full of events
-            // Can't register for the same event more than once
-            // Make the view
             
-            ViewData["EventNames"] = new SelectList(GetAvailableEvents(u));
+            ViewData["EventNames"] = new SelectList(GetAvailableEvents(u), "Id", "Name");
 
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterForEvent([Bind("Id, UserId, EventId")] EventRegistry eventRegistry)
+        {
+            User u = await GetLoggedInUser();
+
+            eventRegistry.UserId = u.Id;
+
+            context.Update(eventRegistry);
+            context.SaveChanges();
+
+            ViewData["EventNames"] = new SelectList(GetAvailableEvents(u), "Id", "Name");
+
+            return View();
+        }
+
+        private List<Event> GetRegisteredEvents(User user)
+        {
+            List<int> registeredEventIds = context.EventRegistry.Where(x => x.UserId == user.Id).Select(x => x.EventId).ToList();
+            List<Event> events = context.Event.ToList();
+            List<Event> availableEvents = new List<Event>();
+
+            foreach (int eid in registeredEventIds)
+            {
+                availableEvents.Add(events.Where(x => x.Id != eid).FirstOrDefault());
+            }
+
+            return availableEvents;
+        }
+
+        public async Task<IActionResult> RegisteredEvents()
+        {
+            User u = await GetLoggedInUser();
+            return View(GetRegisteredEvents(u));
+        }
     }
 }
