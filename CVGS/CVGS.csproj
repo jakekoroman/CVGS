@@ -36,19 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211126002552_items-relation.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211126002552_items-relation.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211126003832_cart-item-relationships.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SourceGeneratorInput Remove="Migrations\20211126003832_cart-item-relationships.Designer.cs" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
