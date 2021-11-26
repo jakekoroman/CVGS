@@ -21,6 +21,7 @@ namespace CVGS.Controllers
         {
 
         }
+
         public async Task<IActionResult> Index()
         {
             if (!IsLoggedIn())
@@ -513,7 +514,7 @@ namespace CVGS.Controllers
 
         public IActionResult AddGameRating(int id)
         {
- 
+
             GameRatings rating = new GameRatings();
             rating.UserId = GetUserLoggedInId();
             rating.GameID = id;
@@ -532,7 +533,7 @@ namespace CVGS.Controllers
         public async Task<IActionResult> EditGameRating(int? id)
         {
             GameRatings rating = await base.context.GameRatings.FirstOrDefaultAsync((rating) => rating.GameID == id && rating.UserId == GetUserLoggedInId());
-            
+
             return View(rating);
         }
 
@@ -543,6 +544,38 @@ namespace CVGS.Controllers
             base.context.Update(r);
             await base.context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private List<String> GetAvailableEvents(User user)
+        {
+            List<int> registeredEventIds = context.EventRegistry.Where(x => x.UserId == user.Id).Select(x => x.EventId).ToList();
+            List<Event> events = context.Event.ToList();
+            List<Event> registeredEvents = new List<Event>();
+
+            foreach (int eid in registeredEventIds)
+            {
+                registeredEvents.Add(context.Event.Where(x => x.Id != eid).FirstOrDefault());
+            }
+
+            foreach (Event e in registeredEvents)
+            {
+                events.Remove(e);
+            }
+
+            return events.Select(x => x.Name).ToList();
+        }
+
+        public async Task<IActionResult> RegisterForEvent()
+        {
+            User u = await GetLoggedInUser();
+            // TODO: Implement
+            // Add select list full of events
+            // Can't register for the same event more than once
+            // Make the view
+            
+            ViewData["EventNames"] = new SelectList(GetAvailableEvents(u));
+
+            return View();
         }
 
     }

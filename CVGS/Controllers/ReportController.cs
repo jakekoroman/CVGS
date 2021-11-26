@@ -61,8 +61,5 @@ namespace CVGS.Controllers
         {
             return View();
         }
-
-       
-        
     }
 }
