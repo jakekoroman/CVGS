@@ -1,4 +1,4 @@
-@model IEnumerable<CVGS.Models.User>
+@model dynamic
 
 @{
     ViewData["Title"] = "Wish List Report";
@@ -7,27 +7,37 @@
 <table id="gameList" class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.DisplayName)</th>
-            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>Display Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Game Wish List</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var user in Model.Users)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DisplayName)
+                    @user.DisplayName
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @user.FirstName
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    @user.LastName
                 </td>
                 <td>
-                    UNIMPLEMENTED
+                    @{
+                        List<String> gamesList = new List<String>();
+                        foreach (var listItem in Model.WishList)
+                        {
+                            if (listItem.UserId == user.Id)
+                                gamesList.Add(listItem.GameName);
+                        }
+
+                        string games = String.Join(", ", gamesList).Trim();
+                        @Html.Raw(games);
+                    }
                 </td>
             </tr>
         }

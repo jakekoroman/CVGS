@@ -11,6 +11,7 @@ using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml;
+using System.Dynamic;
 
 namespace CVGS.Controllers
 {
@@ -45,18 +46,25 @@ namespace CVGS.Controllers
         {
             return View(await base.context.Game.ToListAsync());
         }
+
         public async Task<IActionResult> MemberList()
         {
             return View(await base.context.User.ToListAsync());
         }
+
         public async Task<IActionResult> MemberDetail()
         {
             return View(await base.context.User.ToListAsync());
         }
+
         public async Task<IActionResult> WishList()
         {
-            return View(await base.context.User.ToListAsync());
+            dynamic model = new ExpandoObject();
+            model.Users = await context.User.ToListAsync();
+            model.WishList = await context.WishList.ToListAsync();
+            return View(model);
         }
+
         public IActionResult Sales()
         {
             return View();
