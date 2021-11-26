@@ -38,8 +38,12 @@
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    <a asp-action="ViewGame" asp-route-id="@item.Id">View Game</a> 
+                                    <a asp-action="ViewGame" asp-route-id="@item.Id">View Game</a>
                                     <a asp-action="AddToCart" asp-route-id="@item.Id">Add to Cart</a>
+                                    @if (item.Owned)
+                                    {
+                                        <a asp-action="Download" asp-route-id="@item.Id">Download</a>
+                                    }
                                 </td>
                             </tr>
                         }

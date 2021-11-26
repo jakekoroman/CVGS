@@ -479,6 +479,24 @@ namespace CVGS.Controllers
         {
             SearchGameViewModel model = new SearchGameViewModel();
             model.Games = await context.Game.ToListAsync();
+
+            foreach(Game game in model.Games) 
+            {
+                List<Order> orders = await base.context.Orders.Where((order) => order.UserId == GetUserLoggedInId()).ToListAsync();
+
+                foreach(Order order in orders)
+                {
+                    List<OrderItem> items = await base.context.OrderItems.Where((item) => item.OrderId == order.Id).ToListAsync();
+                  foreach (OrderItem item in items)
+                    {
+                        if (item.GameId == game.Id)
+                        {
+                            game.Owned = true;
+                        }
+                    }
+                }
+
+            }
             return View(model);
         }
 
@@ -492,6 +510,12 @@ namespace CVGS.Controllers
                 model.Games = await context.Game.ToListAsync();
             }
             return View(model);
+        }
+
+        public async Task<IActionResult> Download(int id)
+        {
+            Game game = await base.context.Game.FirstOrDefaultAsync((g) => g.Id == id);
+            return View(game);
         }
 
         public async Task<IActionResult> ViewGame(int? id)
