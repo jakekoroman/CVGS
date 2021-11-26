@@ -4,14 +4,16 @@ using CVGS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CVGS.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20211126003101_cart-relationship-to-item")]
+    partial class cartrelationshiptoitem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,10 +87,6 @@ namespace CVGS.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("GameId");
 
                     b.ToTable("CartItems");
                 });
@@ -429,21 +427,6 @@ namespace CVGS.Migrations
                     b.HasOne("CVGS.Models.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CVGS.Models.CartItem", b =>
-                {
-                    b.HasOne("CVGS.Models.Cart", "Cart")
-                        .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Models.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
