@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CVGS.Models.Order>
+
+<div>
+
+    <h1>Orders</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Number of Games
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderItems.Count)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @if (item.Status != "Processed")
+                        {
+                            <a asp-action="Process" asp-route-id="@item.Id">Process</a> 
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <ul>
+    </ul>
+</div>
+
+<div>
+    <a href="/Employee">Back</a>
+</div>

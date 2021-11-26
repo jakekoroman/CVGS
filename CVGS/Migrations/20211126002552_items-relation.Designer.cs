@@ -4,14 +4,16 @@ using CVGS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CVGS.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20211126002552_items-relation")]
+    partial class itemsrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace CVGS.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CartId")
+                    b.Property<int?>("CartId")
                         .HasColumnType("int");
 
                     b.Property<int>("GameId")
@@ -87,8 +89,6 @@ namespace CVGS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
-
-                    b.HasIndex("GameId");
 
                     b.ToTable("CartItems");
                 });
@@ -435,17 +435,9 @@ namespace CVGS.Migrations
 
             modelBuilder.Entity("CVGS.Models.CartItem", b =>
                 {
-                    b.HasOne("CVGS.Models.Cart", "Cart")
+                    b.HasOne("CVGS.Models.Cart", null)
                         .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Models.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CartId");
                 });
 
             modelBuilder.Entity("CVGS.Models.CreditCard", b =>

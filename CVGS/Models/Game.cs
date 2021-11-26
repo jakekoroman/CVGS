@@ -33,6 +33,9 @@ namespace CVGS.Models
         [NotMapped]
         public double OverAllRating { get; set; }
 
+        [NotMapped]
+        public Boolean Owned { get; set; }
+
         public static readonly List<string> Categories = new List<string>()
         {
             "Sandbox",

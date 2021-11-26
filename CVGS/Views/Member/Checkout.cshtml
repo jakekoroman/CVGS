@@ -1,0 +1,17 @@
+﻿@model Checkout
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Checkout">
+            <div class="form-group">
+                <label>Credit Cards</label>
+                <select class="form-control"  asp-for="CreditCardNumber" asp-items="@Model.CreditCardsList"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Checkout" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

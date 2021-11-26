@@ -1,0 +1,31 @@
+﻿@model Cart
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Cart</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+            Ga,es
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Checkout">Checkout</a>
+</div>

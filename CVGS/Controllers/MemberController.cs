@@ -480,6 +480,24 @@ namespace CVGS.Controllers
         {
             SearchGameViewModel model = new SearchGameViewModel();
             model.Games = await context.Game.ToListAsync();
+
+            foreach(Game game in model.Games) 
+            {
+                List<Order> orders = await base.context.Orders.Where((order) => order.UserId == GetUserLoggedInId()).ToListAsync();
+
+                foreach(Order order in orders)
+                {
+                    List<OrderItem> items = await base.context.OrderItems.Where((item) => item.OrderId == order.Id).ToListAsync();
+                  foreach (OrderItem item in items)
+                    {
+                        if (item.GameId == game.Id)
+                        {
+                            game.Owned = true;
+                        }
+                    }
+                }
+
+            }
             return View(model);
         }
 
@@ -493,6 +511,12 @@ namespace CVGS.Controllers
                 model.Games = await context.Game.ToListAsync();
             }
             return View(model);
+        }
+
+        public async Task<IActionResult> Download(int id)
+        {
+            Game game = await base.context.Game.FirstOrDefaultAsync((g) => g.Id == id);
+            return View(game);
         }
 
         public async Task<IActionResult> ViewGame(int? id)
@@ -511,14 +535,102 @@ namespace CVGS.Controllers
             return View(game);
         }
 
-
-        public IActionResult AddGameRating(int id)
+        public async Task<IActionResult> AddToCart(int id)
         {
+            Game game = await base.context.Game.FirstOrDefaultAsync((game) => game.Id == id);
+            Cart cart = await GetCart();
 
-            GameRatings rating = new GameRatings();
-            rating.UserId = GetUserLoggedInId();
-            rating.GameID = id;
-            return View(rating);
+            CartItem item = new CartItem();
+            item.GameId = id;
+            item.CartId = cart.Id;
+            
+
+
+            base.context.Add(item);
+            await base.context.SaveChangesAsync();
+            
+            return RedirectToAction("Games");
+        }
+
+        public async Task<Cart> GetCart()
+        {
+            Cart cart = await base.context.Carts.FirstOrDefaultAsync((cart) => cart.UserId == GetUserLoggedInId());
+            if (cart == null)
+            {
+                cart = new Cart();
+                cart.UserId = GetUserLoggedInId();
+                base.context.Add(cart);
+                await base.context.SaveChangesAsync();
+            }
+            cart.Items = await base.context.CartItems.Where((ci) => ci.CartId == cart.Id).ToListAsync();
+            foreach (CartItem item in cart.Items)
+            {
+                item.Game = await base.context.Game.FirstOrDefaultAsync((game) => game.Id == item.GameId);
+            }
+            return cart;
+        }
+
+        public async void saveCart(Cart cart)
+        {
+            base.context.Update(cart);
+            await base.context.SaveChangesAsync();
+        }
+
+        public async Task<IActionResult> Cart()
+        {
+            Cart cart = await GetCart();
+            return View(cart);
+        }
+
+        public async Task<IActionResult> Checkout()
+        {
+            Checkout checkout = await GetCheckout();
+            return View(checkout);
+        }
+
+        public async Task<Checkout> GetCheckout()
+        {
+            Checkout checkout = new Checkout();
+            checkout.Cart = await GetCart();
+            List<CreditCard> cards = await base.context.CreditCard.Where((c) => c.UserId == GetUserLoggedInId()).ToListAsync();
+            List<string> cardStrings = new List<string>();
+
+            cards.ForEach((card) => cardStrings.Add(card.CardNumber));
+
+            checkout.CreditCardsList = new SelectList(cardStrings);
+            return checkout;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout([Bind("CreditCardNumber")] Checkout checkout)
+        {
+            Checkout c = await GetCheckout();
+
+            Order order = new Order();
+            order.Status = "Pending";
+            order.UserId = GetUserLoggedInId();
+
+            base.context.Add(order);
+            await base.context.SaveChangesAsync();
+
+            Cart cart = await GetCart();
+            foreach(CartItem item in cart.Items.ToList())
+            {
+                OrderItem orderItem = new OrderItem();
+                orderItem.OrderId = order.Id;
+                orderItem.GameId = item.GameId;
+                base.context.Add(orderItem);
+                await base.context.SaveChangesAsync();
+
+                base.context.Remove(item);
+                await base.context.SaveChangesAsync();
+            }
+
+         
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -529,6 +641,17 @@ namespace CVGS.Controllers
             await base.context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult AddGameRating(int id)
+        {
+ 
+            GameRatings rating = new GameRatings();
+            rating.UserId = GetUserLoggedInId();
+            rating.GameID = id;
+            return View(rating);
+        }
+
+
 
         public async Task<IActionResult> EditGameRating(int? id)
         {
