@@ -5,16 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CVGS.Data;
-using CVGS.Models;
-
 
 namespace CVGS.Controllers
 {
@@ -59,6 +50,24 @@ namespace CVGS.Controllers
 
             order.Status = "Processed";
             base.context.Update(order);
+
+            // Add charge to the sales table
+            List<int> gameIds = new List<int>();
+            order.OrderItems = await base.context.OrderItems.Where((orderItem) => orderItem.OrderId == order.Id).ToListAsync();
+
+            foreach (OrderItem orderItem in order.OrderItems)
+                gameIds.Add(orderItem.GameId);
+
+            // This is probably really slow but i have so much stuff to do it isn't worth my time
+            foreach (int gameId in gameIds)
+            {
+                Sale sale = new Sale();
+                sale.OrderId = id;
+                sale.GameId = order.OrderItems.Where(x => x.GameId == gameId).FirstOrDefault().GameId;
+                sale.Total = context.Game.Where(x => x.Id == gameId).FirstOrDefault().Price;
+                context.Update(sale);
+            }
+
             await base.context.SaveChangesAsync();
             return View();
         }

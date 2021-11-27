@@ -65,9 +65,12 @@ namespace CVGS.Controllers
             return View(model);
         }
 
-        public IActionResult Sales()
+        public async Task<IActionResult> Sales()
         {
-            return View();
+            dynamic model = new ExpandoObject();
+            model.Games = await context.Game.ToListAsync();
+            model.Sales = await context.Sales.ToListAsync();
+            return View(model);
         }
     }
 }

@@ -1,4 +1,45 @@
-<!-- TODO -->
-<!-- Have to make a sales table and calculate the sales after each order FML-->
+@model dynamic
 
-UNIMPLEMENTED
+@{
+    ViewData["Title"] = "Sales Report";
+}
+
+<table id="gameList" class="table">
+    <thead>
+        <tr>
+            <th>Game Name</th>
+            <th>Release Date</th>
+            <th>Price</th>
+            <th>Game Sales</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model.Games)
+        {
+            <tr>
+                <td>
+                    @game.Name
+                </td>
+                <td>
+                    @game.ReleaseDate
+                </td>
+                <td>
+                    @game.Price
+                </td>
+                <td>
+                    @{
+                        double totalSales = 0;
+                        foreach (var sale in Model.Sales)
+                        {
+                            if (game.Id == sale.GameId)
+                                totalSales += game.Price;
+                        }
+
+                        @Html.Raw(totalSales);
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

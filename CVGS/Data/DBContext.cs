@@ -43,5 +43,6 @@ namespace CVGS.Data
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Sale> Sales { get; set; }
     }
 }
