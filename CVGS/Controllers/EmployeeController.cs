@@ -20,6 +20,12 @@ namespace CVGS.Controllers
         public async Task<IActionResult> Index()
         {
             User user = await GetLoggedInUser();
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (user.UserRole == "MEMBER")
             {
                 return RedirectToAction("Index", "Member");

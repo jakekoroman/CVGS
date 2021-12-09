@@ -505,6 +505,11 @@ namespace CVGS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Games([Bind("Name")] SearchGameViewModel model)
         {
+            if (String.IsNullOrEmpty(model.Name))
+            {
+                model.Name = " ";
+            }
+
             model.Games = await context.Game.Where((game) => game.Name.ToLower().Contains(model.Name)).ToListAsync();
             if (model.Name.Length == 0)
             {
